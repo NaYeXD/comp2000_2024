@@ -1,54 +1,38 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseEvent;
+import java.awt.Dimension;
+import java.awt.Graphics;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 public class Main extends JFrame {
     public static void main(String[] args) throws Exception {
-    Main window = new Main();
+      Main window = new Main();
+      window.run();
     }
+
     class Canvas extends JPanel {
-        private Grid grid;
-        public Canvas() 
-        {
-            setPreferredSize(new Dimension(720, 720));
-            grid = new Grid(20, 20, 35);
+      Grid grid = new Grid();
+      public Canvas() {
+        setPreferredSize(new Dimension(720, 720));
+      }
 
-            addMouseMotionListener(new MouseMotionListener() {
-                @Override
-                public void mouseDragged(MouseEvent e)
-                {
-                    updateHighlight(e);
-                }        
-
-                @Override
-                public void mouseMoved(MouseEvent e)
-                {
-                    updateHighlight(e);
-                }
-
-                private void updateHighlight(MouseEvent e)
-                {
-                    Point mousePos = e.getPoint();
-                    grid.updateHighlight(mousePos);
-                    repaint();
-                }
-            });
-        }
-        
-        @Override
-        protected void paintComponent(Graphics g)
-        {
-            super.paintComponent(g);
-            grid.paint(g);
-        }
+      @Override
+      public void paint(Graphics g) {
+        grid.paint(g, getMousePosition());
+      }
     }
 
-    private Main() 
-    {
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Canvas canvas = new Canvas();
-        this.setContentPane(canvas);
-        this.pack();
-        this.setVisible(true);
+    private Main() {
+      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      Canvas canvas = new Canvas();
+      this.setContentPane(canvas);
+      this.pack();
+      this.setVisible(true);
+    }
+
+    public void run() {
+      while(true) {
+        repaint();
+      }
     }
 }

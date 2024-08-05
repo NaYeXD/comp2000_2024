@@ -1,33 +1,36 @@
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
 
 public class Cell {
-    private int x;
-    private int y;
-    private int size;
-    private Color fillColor;
-    private Color borderColor;
-    private boolean highlighted;
+  // fields
+  int x;
+  int y;
+  static int size = 35;
 
-    public Cell(int x, int y, int size)
-    {
-        this.x = x;
-        this.y = y;
-        this.size = size;
-        this.fillColor = Color.WHITE;
-        this.borderColor = Color.BLACK;
-        this.highlighted = false;
-    }
+  // constructors
+  public Cell(int inX, int inY) {
+    x = inX;
+    y = inY;
+  }
 
-    public void setHighlighted(boolean highlighted)
-    {
-        this.highlighted = highlighted;
-        this.fillColor = highlighted ? Color.GRAY : Color.WHITE;
+  // methods
+  public void paint(Graphics g, Point mousePos) {
+    if(contains(mousePos)) {
+      g.setColor(Color.GRAY);
+    } else {
+      g.setColor(Color.WHITE);
     }
+    g.fillRect(x, y, size, size);
+    g.setColor(Color.BLACK);
+    g.drawRect(x, y, size, size);
+  }
 
-    public void paint(Graphics g){
-        g.setColor(fillColor);
-        g.fillRect(x, y, size, size);
-        g.setColor(borderColor);
-        g.drawRect(x, y, size, size);
+  public boolean contains(Point p) {
+    if(p != null) {
+      return x < p.x && x+size > p.x && y < p.y && y+size > p.y;
+    } else {
+      return false;
     }
+  }
 }
