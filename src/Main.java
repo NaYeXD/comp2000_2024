@@ -1,6 +1,5 @@
 import java.awt.Dimension;
 import java.awt.Graphics;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -8,18 +7,6 @@ public class Main extends JFrame {
     public static void main(String[] args) throws Exception {
       Main window = new Main();
       window.run();
-    }
-
-    class Canvas extends JPanel {
-      Grid grid = new Grid();
-      public Canvas() {
-        setPreferredSize(new Dimension(720, 720));
-      }
-
-      @Override
-      public void paint(Graphics g) {
-        grid.paint(g, getMousePosition());
-      }
     }
 
     private Main() {
@@ -33,6 +20,11 @@ public class Main extends JFrame {
     public void run() {
       while(true) {
         repaint();
+        try{
+          Thread.sleep(16);
+        } catch (InterruptedException e){
+          e.printStackTrace();
+        }
       }
     }
 }
