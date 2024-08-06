@@ -18,7 +18,6 @@ public class Main extends JFrame {
       Grid grid = new Grid();
       LinkedList<Point> mousePositions = new LinkedList<>();
       int trailLength = 100;
-      Point currentMousePos;
 
       public Canvas() {
         setPreferredSize(new Dimension(720, 720));
@@ -28,7 +27,7 @@ public class Main extends JFrame {
       @Override
       public void paint(Graphics g) {
         super.paint(g);
-        grid.paint(g, currentMousePos);
+        grid.paint(g, getMousePosition());
 
         for(Point p:mousePositions)
         {
@@ -40,7 +39,12 @@ public class Main extends JFrame {
       @Override
       public void mouseMoved(MouseEvent e)
       {
-        currentMousePos = e.getPoint();
+        if(mousePositions.size() >= trailLength)
+        {
+          mousePositions.removeFirst();
+        }
+        mousePositions.addLast(e.getPoint());
+        repaint();
       }
 
       @Override
@@ -48,7 +52,6 @@ public class Main extends JFrame {
       {
         mouseMoved(e);
       }
-      
     }
 
     private Main() {
@@ -61,31 +64,16 @@ public class Main extends JFrame {
 
     public void run() {
       while(true) {
-        Canvas canvas = (Canvas) getContentPane();
-        Point mousePos = canvas.getMousePosition();
+        repaint();
 
-        if (mousePos != null) 
-        {
-            canvas.currentMousePos = mousePos;
-        }
-        if (canvas.mousePositions.size() >= canvas.trailLength) 
-        {
-            canvas.mousePositions.removeFirst();
-        }
-        if (canvas.currentMousePos != null) 
-        {
-            canvas.mousePositions.addLast(canvas.currentMousePos);
-        }
-        canvas.repaint();
-      
         //60 FPS +-
         try 
         {
-            Thread.sleep(16);
-        }
+          Thread.sleep(16); // roughly 60 FPS
+        } 
         catch (InterruptedException e) 
         {
-             e.printStackTrace();
+          e.printStackTrace();
         }
       }
     }
